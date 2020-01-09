@@ -5,6 +5,7 @@ let mission = false;
 let peeBar = 100;
 let lives = 3;
 let audio = true;
+let alcool = 60;
 
 oxo.screens.loadScreen("home", function() {
   playAudiohome();
@@ -21,7 +22,6 @@ oxo.screens.loadScreen("home", function() {
     }
   });
 
-
   let enable = document.getElementById("pop__btnSound");
 
   enable.addEventListener("click", function() {
@@ -30,8 +30,7 @@ oxo.screens.loadScreen("home", function() {
       pauseAudiohome();
       pauseAudioback();
       audio = false;
-    }
-    else {
+    } else {
       playAudiohome();
       playAudioback();
       audio = true;
@@ -40,7 +39,6 @@ oxo.screens.loadScreen("home", function() {
 
   let btn = document.getElementById("btnstart");
   btn.addEventListener("click", function() {
-
     oxo.screens.loadScreen("game", function() {
       initWalls();
       interaction();
@@ -52,7 +50,7 @@ oxo.screens.loadScreen("home", function() {
       
 
       var lastdirection = 0;
-      oxo.inputs.listenKeys(['up', 'down', 'right', 'left'], function(key) {
+      oxo.inputs.listenKeys(["up", "down", "right", "left"], function(key) {
         stop = false;
         direction(key);
         orientation = key;
@@ -142,7 +140,7 @@ function automove() {
     return;
   }
   playAudio();
-  oxo.animation.move(character, orientation, 1);
+  oxo.animation.move(character, orientation, 2);
 }
 
 function interaction() {
@@ -199,7 +197,8 @@ function interaction() {
   oxo.elements.onCollisionWithElement(character, toiletAction, function() {
     oxo.inputs.listenKey("e", function test() {
       if (peeBar >= 90) {
-        peeBar = 30;
+        peeBar = 50;
+        alcool -= 10;
       }
       oxo.inputs.cancelKeyListener("e");
     });
@@ -211,6 +210,13 @@ function interaction() {
       oxo.inputs.listenKey("e", function test() {
         if (peeBar < 100) {
           peeBar += 10;
+          alcool -= 10;
+        } else {
+          document.querySelector(".life" + lives).classList.add("hiddenLife");
+          lives--;
+        }
+        if (lives == 0) {
+          alert("you dead bruh");
         }
         oxo.inputs.cancelKeyListener("e");
       });
@@ -221,7 +227,7 @@ function interaction() {
     bedAction,
     function testMission() {
       oxo.inputs.listenKey("e", function() {
-        if (peeBar <= 50) alert("You won!");
+        if (peeBar <= 50 || alcool <= 50) alert("You won!");
         oxo.inputs.cancelKeyListener("e");
 
       });
@@ -274,6 +280,7 @@ function pauseAudioend() {
   backmusic.pause();
 }
 
+
 function playAudiohurt() {
   var backmusic = document.getElementById("hurt");
   backmusic.play();
@@ -285,3 +292,11 @@ function playAudioalert() {
   backmusic.play();
   backmusic.volume = 0.5;
 }
+
+/*function looseLife() {
+  document.querySelector(".life" + lives).classList.add("hiddenLife");
+  lives--;
+  if (lives == 0) {
+    alert("you dead bruh");
+  }
+}*/
