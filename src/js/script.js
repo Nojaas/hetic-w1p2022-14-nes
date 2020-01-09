@@ -28,10 +28,12 @@ oxo.screens.loadScreen("home", function() {
     enable.classList.toggle("remove");
     if (audio) {
       pauseAudiohome();
+      pauseAudioback();
       audio = false;
     }
     else {
       playAudiohome();
+      playAudioback();
       audio = true;
     }
   });
@@ -40,9 +42,15 @@ oxo.screens.loadScreen("home", function() {
   btn.addEventListener("click", function() {
 
     oxo.screens.loadScreen("game", function() {
-      playAudioback();
       initWalls();
       interaction();
+    
+      if (!e.target.classList.contains("popSettingwin")) {
+        let popSettingwinInterface = document.getElementById("popUpsettings");
+        popSettingwinInterface.classList.remove("here");
+      };
+      
+
       var lastdirection = 0;
       oxo.inputs.listenKeys(['up', 'down', 'right', 'left'], function(key) {
         stop = false;
@@ -181,9 +189,10 @@ function interaction() {
     oxo.elements.onCollisionWithElement(character, stool, function() {
       document.querySelector(".life" + lives).classList.add("hiddenLife");
       lives--;
-      if (lives == 0) {
-        alert("you dead bruh");
-      }
+      if (lives == 1 || 2);
+      playAudiohurt();
+      if (lives == 0)
+      playAudioalert();
     });
   }
 
@@ -214,6 +223,7 @@ function interaction() {
       oxo.inputs.listenKey("e", function() {
         if (peeBar <= 50) alert("You won!");
         oxo.inputs.cancelKeyListener("e");
+
       });
     }
   );
@@ -258,9 +268,20 @@ function playAudioend() {
   var backmusic = document.getElementById("endmusic");
   backmusic.play();
   backmusic.volume = 0.1;
-
 }
 function pauseAudioend() {
   var backmusic = document.getElementById("endmusic");
   backmusic.pause();
+}
+
+function playAudiohurt() {
+  var backmusic = document.getElementById("hurt");
+  backmusic.play();
+  backmusic.volume = 0.5;
+}
+
+function playAudioalert() {
+  var backmusic = document.getElementById("alert");
+  backmusic.play();
+  backmusic.volume = 0.5;
 }

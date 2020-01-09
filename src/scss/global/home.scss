@@ -53,9 +53,12 @@
 
   .popUpsettings {
     position: absolute;
+    margin :auto;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
     opacity: 0;
-    top: 30%;
-    left: 30%;
     width: 700px;
     height: 400px;
     animation: opacity 1s ease;
